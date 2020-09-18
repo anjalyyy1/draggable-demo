@@ -36,3 +36,47 @@
     transform: rotate(360deg);
   }
 }
+
+.border,
+.element-outer-border .border {
+  position: absolute;
+  cursor: pointer;
+  width: 0;
+  height: 0;
+  z-index: 999;
+  border: 2px solid red;
+  opacity: 0;
+}
+
+.border.right,
+.element-outer-border .border.right {
+  border-right: 2px solid red;
+  right: 0;
+  height: 100%;
+}
+
+.border.left,
+.element-outer-border .border.left {
+  border-left: 2px solid red;
+  left: 0;
+  height: 100%;
+}
+
+.border.top,
+.element-outer-border .border.top {
+  border-top: 2px solid red;
+  top: 0;
+  width: 100%;
+}
+
+.border.bottom,
+.element-outer-border .border.bottom {
+  border-bottom: 2px solid red;
+  bottom: 0;
+  width: 100%;
+}
+
+.rect:hover .border,
+.rect.active .border {
+  border-color: red;
+}
