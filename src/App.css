@@ -24,8 +24,15 @@
   color: white;
 }
 
+.rnd-container {
+  height: 500px;
+}
+
 .App-link {
   color: #61dafb;
+}
+
+.rnd-container {
 }
 
 @keyframes App-logo-spin {
@@ -44,34 +51,34 @@
   width: 0;
   height: 0;
   z-index: 999;
-  border: 2px solid red;
+  border: transparent;
   opacity: 0;
 }
 
 .border.right,
 .element-outer-border .border.right {
-  border-right: 2px solid red;
+  border-right: 2px solid;
   right: 0;
   height: 100%;
 }
 
 .border.left,
 .element-outer-border .border.left {
-  border-left: 2px solid red;
+  border-left: 2px solid;
   left: 0;
   height: 100%;
 }
 
 .border.top,
 .element-outer-border .border.top {
-  border-top: 2px solid red;
+  border-top: 2px solid;
   top: 0;
   width: 100%;
 }
 
 .border.bottom,
 .element-outer-border .border.bottom {
-  border-bottom: 2px solid red;
+  border-bottom: 2px solid;
   bottom: 0;
   width: 100%;
 }
@@ -79,4 +86,17 @@
 .rect:hover .border,
 .rect.active .border {
   border-color: red;
+}
+
+.test {
+  width: 200px;
+}
+
+.grid-tiles__svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  height: 100%;
+  width: 100%;
 }
