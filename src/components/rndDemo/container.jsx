@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import RndDemo from "./index";
-import { times, indexOf } from "lodash";
-
+import { times, indexOf, round } from "lodash";
 class RnDDemoPage extends Component {
   state = {
     isShowBorder: true,
@@ -9,13 +8,8 @@ class RnDDemoPage extends Component {
     width: 96,
     height: 100
   };
-
   helperArray = [];
   colSpan = 0;
-
-  componentDidMount() {
-    this.setWidthHelper();
-  }
 
   setWidthHelper = () => {
     this.helperArray = times(12, (eachElement, index) => {
@@ -24,15 +18,11 @@ class RnDDemoPage extends Component {
     this.calculateWidthHandler();
   };
 
-  //  92 + 24 + 92  = 208 ==== 2 grid
-
   showGridHandler = () => {
     this.setState({
       isShowGrid: true
     });
   };
-
-  // a + (n – 1) × d
 
   showBorderHandler = () => {
     this.setState({
@@ -40,53 +30,54 @@ class RnDDemoPage extends Component {
     });
   };
 
-  calculateWidth = n => {
+  calculateGridSize = n => {
     const svgWidth = 92;
     const difference = 116;
-
     let test = svgWidth + (n - 1) * difference;
     return test;
   };
 
-  calculateWidthHandler = currentWidth => {
-    let helperArrayCopy = [...this.helperArray];
-    helperArrayCopy.push(currentWidth);
-    helperArrayCopy.sort(function (a, b) {
-      return a - b;
-    });
+  customRound = test => {
+    const DIVISOR = parseInt(test);
+    const result = test % DIVISOR;
+    let roundedOffNumber = round(result, 1);
 
-    let indexOfCurrentElement = indexOf(helperArrayCopy, currentWidth);
-
-    if (
-      Math.abs(helperArrayCopy[indexOfCurrentElement - 1] - currentWidth) <
-      Math.abs(helperArrayCopy[indexOfCurrentElement + 1] - currentWidth)
-    ) {
-      return helperArrayCopy[indexOfCurrentElement - 1];
-    } else {
-      return helperArrayCopy[indexOfCurrentElement + 1];
+    if (roundedOffNumber <= 0.4) {
+      return Math.floor(test);
     }
+    return Math.ceil(test);
+  };
+
+  calculateWidthHandler = currentWidth => {
+    const DIFFERENCE = 116;
+    const test = currentWidth / DIFFERENCE;
+    let result = this.customRound(test);
+
+    return result;
   };
 
   onDragStartHandler = e => {
     this.showGridHandler();
   };
 
+  onResizeHandler = (e, direction, ref, delta, position) => {
+    // console.log(ref.style.width, "width");
+    console.log(
+      ref.style.width,
+      this.calculateWidthHandler(ref.offsetWidth),
+      "important"
+    );
+  };
+
   onResizeStopHandler = (e, direction, ref, delta, position) => {
     this.showGridHandler();
-    this.calculateWidthHandler(ref.offsetWidth);
-    // console.log(ref.style.width, this.state.width);
 
-    // if (ref.offsetWidth < this.state.width) {
-    //   this.colSpan--;
-    // } else if (ref.offsetWidth > this.state.width) {
-    //   this.colSpan++;
-    // }
-
-    // delta = this.calculateWidth(this.colSpan);
+    let test = this.calculateGridSize(
+      this.calculateWidthHandler(ref.offsetWidth)
+    );
 
     this.setState({
-      // width: this.calculateWidth(this.colSpan++),
-      width: this.calculateWidthHandler(ref.offsetWidth),
+      width: test,
       height: ref.style.height,
       ...position
     });
@@ -105,5 +96,4 @@ class RnDDemoPage extends Component {
     );
   }
 }
-
 export default RnDDemoPage;
