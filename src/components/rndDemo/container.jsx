@@ -1,22 +1,26 @@
 import React, { Component } from "react";
 import RndDemo from "./index";
-import { times, indexOf, round } from "lodash";
+import { times, indexOf, round, difference } from "lodash";
+
+const element = {
+  width: 211,
+  height: 115,
+  x: 233,
+  y: 130
+};
+
 class RnDDemoPage extends Component {
   state = {
     isShowBorder: true,
     isShowGrid: true,
-    width: 96,
-    height: 100
+    width: 211,
+    height: 115,
+    x: 233,
+    y: 130
   };
   helperArray = [];
   colSpan = 0;
-
-  setWidthHelper = () => {
-    this.helperArray = times(12, (eachElement, index) => {
-      return 92 + eachElement * 116;
-    });
-    this.calculateWidthHandler();
-  };
+  rnd = React.createRef();
 
   showGridHandler = () => {
     this.setState({
@@ -30,28 +34,33 @@ class RnDDemoPage extends Component {
     });
   };
 
-  calculateGridSize = n => {
-    const svgWidth = 92;
-    const difference = 116;
-    let test = svgWidth + (n - 1) * difference;
+  /**
+   * Calculate grid size
+   * @param {*} n
+   * @returns box width
+   */
+  calculateGridSize = (n, svgDimension = 92, difference = 116) => {
+    // const svgWidth = 92;
+    // const difference = 116;
+    let test = svgDimension + (n - 1) * difference;
     return test;
   };
 
-  customRound = test => {
-    const DIVISOR = parseInt(test);
-    const result = test % DIVISOR;
+  customRound = gridDecimalValue => {
+    const DIVISOR = parseInt(gridDecimalValue);
+    const result = gridDecimalValue % DIVISOR; // get the remainder
     let roundedOffNumber = round(result, 1);
 
+    // rounding off with 0.4 as base value instead of 0.5
     if (roundedOffNumber <= 0.4) {
-      return Math.floor(test);
+      return Math.floor(gridDecimalValue);
     }
-    return Math.ceil(test);
+    return Math.ceil(gridDecimalValue);
   };
 
-  calculateWidthHandler = currentWidth => {
-    const DIFFERENCE = 116;
-    const test = currentWidth / DIFFERENCE;
-    let result = this.customRound(test);
+  calculateDimensionHandler = (currentWidth, difference = 116) => {
+    const gridDecimalValue = currentWidth / difference;
+    let result = this.customRound(gridDecimalValue);
 
     return result;
   };
@@ -61,25 +70,46 @@ class RnDDemoPage extends Component {
   };
 
   onResizeHandler = (e, direction, ref, delta, position) => {
-    // console.log(ref.style.width, "width");
-    console.log(
-      ref.style.width,
-      this.calculateWidthHandler(ref.offsetWidth),
-      "important"
-    );
+    console.log("object", ref.offsetHeight, position);
+    this.setState({
+      x: element.x
+    });
+  };
+
+  onResizeStartHandler = (e, direction, ref, delta, position) => {
+    this.setState({
+      x: element.x,
+      isResizing: true
+    });
   };
 
   onResizeStopHandler = (e, direction, ref, delta, position) => {
     this.showGridHandler();
 
-    let test = this.calculateGridSize(
-      this.calculateWidthHandler(ref.offsetWidth)
+    console.log(direction, position);
+    let forcedWidth = this.calculateGridSize(
+      this.calculateDimensionHandler(ref.offsetWidth, 116)
+    );
+
+    let forcedHeight = this.calculateGridSize(
+      this.calculateDimensionHandler(ref.offsetHeight, 65),
+      49,
+      65
     );
 
     this.setState({
-      width: test,
-      height: ref.style.height,
-      ...position
+      ...position,
+      x: direction === "left" ? element.x : position.x,
+      width: forcedWidth,
+      height:
+        direction === "top" ||
+        direction === "bottom" ||
+        direction === "bottomRight" ||
+        direction === "bottomLeft"
+          ? forcedHeight
+          : ref.offsetHeight,
+
+      isResizing: false
     });
   };
 

@@ -20,36 +20,45 @@ export default function RndDemo(props) {
     onDragHandler,
     onDragStopHandler,
     onResizeStopHandler,
-    onResizeHandler
+    onResizeHandler,
+    isResizing,
+    onResizeStartHandler,
+    x,
+    y
   } = props;
 
   return (
     <RndContainer
+      isResizing={isResizing}
       className="parent"
       isShowGrid={isShowGrid}
       isShowBorder={isShowBorder}
     >
       <Rnd
+        ref={c => {
+          rnd = c;
+        }}
         className="rnd-wrapper"
         default={{
-          x: 112,
-          y: 110
-          // width: 210,
-          // height: 210
+          x: 233,
+          y: 130
+          // width: 327,
+          // height: 115
         }}
         size={{ width, height }}
+        position={{ x, y }}
         minWidth={50}
         minHeight={50}
         bounds="parent"
-        // resizeGrid={[120, 120]}
-        // dragGrid={[120, 120]}
-        onResizeStart={showGridHandler}
+        // resizeGrid={[116, 65]}
+        dragGrid={[116, 65]}
+        onResizeStart={onResizeStartHandler}
         onResize={onResizeHandler}
-        // onResizeStop={showGridHandler}
+        // // onResizeStop={showGridHandler}
         onResizeStop={onResizeStopHandler}
-        onDrag={onDragHandler}
-        onDragStart={showGridHandler}
-        onDragStop={showGridHandler}
+        // onDrag={onDragHandler}
+        // onDragStart={showGridHandler}
+        // onDragStop={onDragStopHandler}
       >
         <DraggableButton
           onMouseOver={showBorderHandler}
@@ -81,8 +90,8 @@ export default function RndDemo(props) {
 
 const RndContainer = styled.div`
   position: relative;
-  height: 500px;
-  width: 900px;
+  height: 506px;
+  width: 906px;
   margin: auto;
   background: ${props => (props.isShowGrid ? "#d0cdcd" : "transparent")};
   z-index: 8;
@@ -92,8 +101,9 @@ const RndContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: ${props => !props.isResizing && `all 0.5s ease-in`};
     /* padding: 10px; */
-    border: solid 3px ${props => (props.isShowBorder ? "red" : "transparent")};
+    border: solid 2px ${props => (props.isShowBorder ? "red" : "transparent")};
   }
 `;
 
