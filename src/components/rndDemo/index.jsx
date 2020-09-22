@@ -39,12 +39,14 @@ export default function RndDemo(props) {
           rnd = c;
         }}
         className="rnd-wrapper"
-        default={{
-          x: 233,
-          y: 130
-          // width: 327,
-          // height: 115
-        }}
+        default={
+          {
+            // x: 233,
+            // y: 130
+            // width: 327,
+            // height: 115
+          }
+        }
         size={{ width, height }}
         position={{ x, y }}
         minWidth={50}

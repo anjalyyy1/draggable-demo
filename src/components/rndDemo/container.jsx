@@ -70,15 +70,17 @@ class RnDDemoPage extends Component {
   };
 
   onResizeHandler = (e, direction, ref, delta, position) => {
-    console.log("object", ref.offsetHeight, position);
     this.setState({
-      x: element.x
+      width: ref.offsetWidth,
+      height: ref.offsetHeight,
+      ...position
+      // x: 0
     });
   };
 
   onResizeStartHandler = (e, direction, ref, delta, position) => {
     this.setState({
-      x: element.x,
+      // x: element.x,
       isResizing: true
     });
   };
@@ -97,9 +99,17 @@ class RnDDemoPage extends Component {
       65
     );
 
+    let customLeft = direction === "left" ? element.x : position.x;
+
+    console.log();
+    // if (forcedWidth !== ref.offsetWidth) {
+    //   customLeft = position.x;
+    // }
+
     this.setState({
-      ...position,
-      x: direction === "left" ? element.x : position.x,
+      // ...position,
+      x: customLeft,
+      // width: direction === "right" ? forcedWidth : ref.offsetWidth,
       width: forcedWidth,
       height:
         direction === "top" ||
