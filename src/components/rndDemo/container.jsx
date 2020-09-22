@@ -5,7 +5,7 @@ import { times, indexOf, round, difference } from "lodash";
 const element = {
   width: 211,
   height: 115,
-  x: 233,
+  x: 348,
   y: 130
 };
 
@@ -15,7 +15,7 @@ class RnDDemoPage extends Component {
     isShowGrid: true,
     width: 211,
     height: 115,
-    x: 233,
+    x: 348,
     y: 130
   };
   helperArray = [];
@@ -40,10 +40,7 @@ class RnDDemoPage extends Component {
    * @returns box width
    */
   calculateGridSize = (n, svgDimension = 92, difference = 116) => {
-    // const svgWidth = 92;
-    // const difference = 116;
-    let test = svgDimension + (n - 1) * difference;
-    return test;
+    return svgDimension + (n - 1) * difference;
   };
 
   customRound = gridDecimalValue => {
@@ -60,56 +57,70 @@ class RnDDemoPage extends Component {
 
   calculateDimensionHandler = (currentWidth, difference = 116) => {
     const gridDecimalValue = currentWidth / difference;
-    let result = this.customRound(gridDecimalValue);
-
-    return result;
+    return this.customRound(gridDecimalValue);
   };
 
   onDragStartHandler = e => {
     this.showGridHandler();
   };
 
+  onDragHandler = (e, data) => {
+    this.setState({
+      x: data.x,
+      y: data.y
+    });
+  };
+
   onResizeHandler = (e, direction, ref, delta, position) => {
+    console.log(ref.offsetWidth, position.x, "widt");
     this.setState({
       width: ref.offsetWidth,
       height: ref.offsetHeight,
       ...position
-      // x: 0
     });
+
+    // this.getLeftDistance()
   };
 
   onResizeStartHandler = (e, direction, ref, delta, position) => {
     this.setState({
-      // x: element.x,
       isResizing: true
     });
+  };
+
+  getLeftDistance = ({ forcedWidth, currentWidth, currentLeft }) => {
+    const difference = 116;
+    const translateX = currentWidth / difference;
+    const result = this.customRound(translateX) * 116;
+    // const oldGridValue = element.x / 116;
+    // const calculatedGridValue = result / 116;
+    // const newGridValue =
+    console.log({ result });
+
+    return result;
   };
 
   onResizeStopHandler = (e, direction, ref, delta, position) => {
     this.showGridHandler();
 
-    console.log(direction, position);
-    let forcedWidth = this.calculateGridSize(
+    const forcedWidth = this.calculateGridSize(
       this.calculateDimensionHandler(ref.offsetWidth, 116)
     );
 
-    let forcedHeight = this.calculateGridSize(
+    const forcedHeight = this.calculateGridSize(
       this.calculateDimensionHandler(ref.offsetHeight, 65),
       49,
       65
     );
 
-    let customLeft = direction === "left" ? element.x : position.x;
-
-    console.log();
-    // if (forcedWidth !== ref.offsetWidth) {
-    //   customLeft = position.x;
-    // }
+    const forcedLeft = this.getLeftDistance({
+      forcedWidth,
+      currentWidth: ref.offsetWidth,
+      currentLeft: position.x
+    });
 
     this.setState({
-      // ...position,
-      x: customLeft,
-      // width: direction === "right" ? forcedWidth : ref.offsetWidth,
+      x: direction === "left" ? forcedLeft : position.x,
       width: forcedWidth,
       height:
         direction === "top" ||

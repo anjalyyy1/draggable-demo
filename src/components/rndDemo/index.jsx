@@ -58,7 +58,7 @@ export default function RndDemo(props) {
         onResize={onResizeHandler}
         // // onResizeStop={showGridHandler}
         onResizeStop={onResizeStopHandler}
-        // onDrag={onDragHandler}
+        onDrag={onDragHandler}
         // onDragStart={showGridHandler}
         // onDragStop={onDragStopHandler}
       >
