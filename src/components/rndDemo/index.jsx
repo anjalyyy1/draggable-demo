@@ -3,7 +3,6 @@ import { Rnd } from "react-rnd";
 import styled from "styled-components";
 
 // components
-import Grid from "./components/Grid";
 
 const style = {};
 
@@ -23,13 +22,14 @@ export default function RndDemo(props) {
     isResizing,
     onResizeStartHandler,
     x,
-    y
+    y,
+    children
   } = props;
 
   return (
     <RndContainer
       isResizing={isResizing}
-      className="parent"
+      // className="parent"
       isShowGrid={isShowGrid}
       isShowBorder={isShowBorder}
     >
@@ -39,48 +39,28 @@ export default function RndDemo(props) {
         position={{ x, y }}
         minWidth={50}
         minHeight={50}
-        bounds="parent"
+        // bounds="parent"
         dragGrid={[116, 65]}
         onResizeStart={onResizeStartHandler}
         onResize={onResizeHandler}
         onResizeStop={onResizeStopHandler}
         onDrag={onDragHandler}
       >
-        <DraggableButton
-          onMouseOver={showBorderHandler}
-          onMouseOut={showBorderHandler}
-        >
-          Demo
-        </DraggableButton>
+        {children}
       </Rnd>
-
-      {/* {isShowGrid && (
-        <Grid
-          colsWidth={116}
-          gutterWidthSpace={92}
-          colsHeight={65}
-          gutterHeightSpace={49}
-        ></Grid>
-      )} */}
-
-      <Grid
-        colsWidth={116}
-        gutterWidthSpace={92}
-        colsHeight={65}
-        gutterHeightSpace={49}
-      ></Grid>
     </RndContainer>
   );
 }
 
 const RndContainer = styled.div`
-  position: relative;
+  /* position: relative;
   height: 506px;
   width: 906px;
   margin: auto;
-  background: ${props => (props.isShowGrid ? "#d0cdcd" : "transparent")};
+  background: ${props =>
+    props.isShowGrid ? "lightblue" : "red"};
   z-index: 8;
-  margin-top: 100px;
+  margin-top: 100px; */
 
   .rnd-wrapper {
     display: flex;
@@ -90,16 +70,4 @@ const RndContainer = styled.div`
     /* padding: 10px; */
     border: solid 2px ${props => (props.isShowBorder ? "red" : "transparent")};
   }
-`;
-
-const DraggableButton = styled.span`
-  width: 88px;
-  height: 50px;
-  display: flex;
-  border: 1px solid black;
-  background-color: #0bf13d;
-  color: blue;
-  justify-content: center;
-  align-items: center;
-  /* padding: 5px; */
 `;

@@ -20,17 +20,11 @@ const rectWidth = 92;
 class RnDDemoPage extends Component {
   state = {
     isShowBorder: true,
-    isShowGrid: true,
+    isShowGrid: false,
     width: 211,
     height: 115,
     x: 348,
     y: 130
-  };
-
-  showGridHandler = () => {
-    this.setState({
-      isShowGrid: true
-    });
   };
 
   showBorderHandler = () => {
@@ -55,6 +49,8 @@ class RnDDemoPage extends Component {
   };
 
   onResizeStartHandler = (e, direction, ref, delta, position) => {
+    this.props.showGridHandler();
+
     this.setState({
       isResizing: true
     });
@@ -83,15 +79,12 @@ class RnDDemoPage extends Component {
   };
 
   onResizeStopHandler = (e, direction, ref, delta, position) => {
-    this.showGridHandler();
-
     // get the new forced dimensions
     const forcedWidth = this.getElementHorizontalDimensions(
       ref.offsetWidth,
       "right"
     );
     const forcedLeft = this.getElementHorizontalDimensions(position.x, "left");
-
     const forcedHeight = this.getElementVerticalDimensions(
       ref.offsetHeight,
       "bottom"
@@ -105,6 +98,10 @@ class RnDDemoPage extends Component {
       height: forcedHeight,
       isResizing: false
     });
+
+    setTimeout(() => {
+      this.props.showGridHandler();
+    }, 500);
   };
 
   render() {
@@ -113,11 +110,7 @@ class RnDDemoPage extends Component {
       ...this.state,
       ...this.props
     };
-    return (
-      <div>
-        <RndDemo {...stateMethodProps} />
-      </div>
-    );
+    return <RndDemo {...stateMethodProps} />;
   }
 }
 export default RnDDemoPage;
