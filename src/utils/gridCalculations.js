@@ -1,4 +1,4 @@
-import { times, indexOf, round, difference } from "lodash";
+import { round } from "lodash";
 
 /**
  * Calculate dimensions(Uses Arithmetic Progression)

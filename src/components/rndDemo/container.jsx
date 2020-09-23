@@ -12,6 +12,11 @@ const element = {
   y: 130
 };
 
+const widthWithGutterSpace = 116; // also width difference
+const heightWithGutterSpace = 65; // also height difference
+const rectHeight = 49;
+const rectWidth = 92;
+
 class RnDDemoPage extends Component {
   state = {
     isShowBorder: true,
@@ -55,57 +60,49 @@ class RnDDemoPage extends Component {
     });
   };
 
-  getTopDistance = ({ currentTop }) => {
-    const heightWithGutterSpace = 65;
-    const difference = 65;
-    const forcedHeight = calculateGridSize(
-      calculateDimensionHandler(currentTop, difference),
-      heightWithGutterSpace,
-      difference
-    );
+  getElementVerticalDimensions = (value, direction) => {
+    const valueToChecked =
+      direction === "bottom" ? rectHeight : heightWithGutterSpace;
 
-    return forcedHeight;
+    return calculateGridSize(
+      calculateDimensionHandler(value, heightWithGutterSpace),
+      valueToChecked,
+      heightWithGutterSpace
+    );
   };
 
-  getLeftDistance = ({ currentLeft }) => {
-    const difference = 116;
-    const widthWithGutterSpace = 116;
-    const forcedLeft = calculateGridSize(
-      calculateDimensionHandler(currentLeft, difference),
-      difference,
+  getElementHorizontalDimensions = (value, direction) => {
+    const valueToChecked =
+      direction === "right" ? rectWidth : widthWithGutterSpace;
+
+    return calculateGridSize(
+      calculateDimensionHandler(value, widthWithGutterSpace),
+      valueToChecked,
       widthWithGutterSpace
     );
-
-    return forcedLeft;
   };
 
   onResizeStopHandler = (e, direction, ref, delta, position) => {
     this.showGridHandler();
 
     // get the new forced dimensions
-    const forcedWidth = calculateGridSize(
-      calculateDimensionHandler(ref.offsetWidth, 116)
+    const forcedWidth = this.getElementHorizontalDimensions(
+      ref.offsetWidth,
+      "right"
     );
-    const forcedHeight = calculateGridSize(
-      calculateDimensionHandler(ref.offsetHeight, 65),
-      49,
-      65
+    const forcedLeft = this.getElementHorizontalDimensions(position.x, "left");
+
+    const forcedHeight = this.getElementVerticalDimensions(
+      ref.offsetHeight,
+      "bottom"
     );
-    const forcedLeft = this.getLeftDistance({ currentLeft: position.x });
-    const forcedTop = this.getTopDistance({ currentTop: position.y });
+    const forcedTop = this.getElementVerticalDimensions(position.y, "top");
 
     this.setState({
-      x: direction === "left" ? forcedLeft : position.x,
-      y: direction === "top" ? forcedTop : position.y,
+      x: forcedLeft,
+      y: forcedTop,
       width: forcedWidth,
-      height:
-        direction === "top" ||
-        direction === "bottom" ||
-        direction === "bottomRight" ||
-        direction === "bottomLeft"
-          ? forcedHeight
-          : ref.offsetHeight,
-
+      height: forcedHeight,
       isResizing: false
     });
   };
