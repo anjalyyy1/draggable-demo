@@ -6,7 +6,7 @@ const element = {
   width: 211,
   height: 115,
   x: 348,
-  y: 130
+  y: 130,
 };
 
 class RnDDemoPage extends Component {
@@ -16,7 +16,7 @@ class RnDDemoPage extends Component {
     width: 211,
     height: 115,
     x: 348,
-    y: 130
+    y: 130,
   };
   helperArray = [];
   colSpan = 0;
@@ -24,13 +24,13 @@ class RnDDemoPage extends Component {
 
   showGridHandler = () => {
     this.setState({
-      isShowGrid: true
+      isShowGrid: true,
     });
   };
 
   showBorderHandler = () => {
     this.setState({
-      isShowBorder: !this.state.isShowBorder
+      isShowBorder: !this.state.isShowBorder,
     });
   };
 
@@ -39,14 +39,16 @@ class RnDDemoPage extends Component {
    * @param {*} n
    * @returns box width
    */
-  calculateGridSize = (n, svgDimension = 92, difference = 116) => {
-    return svgDimension + (n - 1) * difference;
+  calculateGridSize = (n, svgDimension = 92, difference = 116, consoleBy) => {
+    let test = svgDimension + (n - 1) * difference;
+    console.log(test, "test", consoleBy, n);
+    return test;
   };
 
-  customRound = gridDecimalValue => {
-    const DIVISOR = parseInt(gridDecimalValue);
+  customRound = (gridDecimalValue) => {
+    const DIVISOR = parseInt(gridDecimalValue) || 1; // 1 to avoid division by 0
     const result = gridDecimalValue % DIVISOR; // get the remainder
-    let roundedOffNumber = round(result, 1);
+    let roundedOffNumber = round(result, 3);
 
     // rounding off with 0.4 as base value instead of 0.5
     if (roundedOffNumber <= 0.4) {
@@ -57,26 +59,27 @@ class RnDDemoPage extends Component {
 
   calculateDimensionHandler = (currentWidth, difference = 116) => {
     const gridDecimalValue = currentWidth / difference;
+    // console.log
     return this.customRound(gridDecimalValue);
   };
 
-  onDragStartHandler = e => {
+  onDragStartHandler = (e) => {
     this.showGridHandler();
   };
 
   onDragHandler = (e, data) => {
     this.setState({
       x: data.x,
-      y: data.y
+      y: data.y,
     });
   };
 
   onResizeHandler = (e, direction, ref, delta, position) => {
-    console.log(ref.offsetWidth, position.x, "widt");
+    console.log(ref.offsetHeight, "width", position.y, "left");
     this.setState({
       width: ref.offsetWidth,
       height: ref.offsetHeight,
-      ...position
+      ...position,
     });
 
     // this.getLeftDistance()
@@ -84,20 +87,41 @@ class RnDDemoPage extends Component {
 
   onResizeStartHandler = (e, direction, ref, delta, position) => {
     this.setState({
-      isResizing: true
+      isResizing: true,
     });
+  };
+
+  getTopDistance = ({ currentTop }) => {
+    const heightWithGutterSpace = 65;
+    const difference = 65;
+    const forcedHeight = this.calculateGridSize(
+      this.calculateDimensionHandler(currentTop, difference),
+      heightWithGutterSpace,
+      difference,
+      "from top"
+    );
+
+    return forcedHeight;
   };
 
   getLeftDistance = ({ forcedWidth, currentWidth, currentLeft }) => {
     const difference = 116;
-    const translateX = currentWidth / difference;
-    const result = this.customRound(translateX) * 116;
-    // const oldGridValue = element.x / 116;
-    // const calculatedGridValue = result / 116;
-    // const newGridValue =
-    console.log({ result });
+    const widthWithGutterSpace = 116;
+    // const translateX = currentWidth / difference;
+    // const result = this.customRound(translateX) * 116;
 
-    return result;
+    const forcedLeft = this.calculateGridSize(
+      this.calculateDimensionHandler(currentLeft, difference),
+      difference,
+      widthWithGutterSpace,
+      "from left"
+    );
+
+    console.log(forcedLeft, "forceleft");
+
+    // console.log({ result });
+
+    return forcedLeft;
   };
 
   onResizeStopHandler = (e, direction, ref, delta, position) => {
@@ -106,6 +130,8 @@ class RnDDemoPage extends Component {
     const forcedWidth = this.calculateGridSize(
       this.calculateDimensionHandler(ref.offsetWidth, 116)
     );
+
+    // console.log({forcedWidth})
 
     const forcedHeight = this.calculateGridSize(
       this.calculateDimensionHandler(ref.offsetHeight, 65),
@@ -116,11 +142,14 @@ class RnDDemoPage extends Component {
     const forcedLeft = this.getLeftDistance({
       forcedWidth,
       currentWidth: ref.offsetWidth,
-      currentLeft: position.x
+      currentLeft: position.x,
     });
+
+    const forcedTop = this.getTopDistance({ currentTop: position.y });
 
     this.setState({
       x: direction === "left" ? forcedLeft : position.x,
+      y: direction === "top" ? forcedTop : position.y,
       width: forcedWidth,
       height:
         direction === "top" ||
@@ -130,7 +159,7 @@ class RnDDemoPage extends Component {
           ? forcedHeight
           : ref.offsetHeight,
 
-      isResizing: false
+      isResizing: false,
     });
   };
 
@@ -138,7 +167,7 @@ class RnDDemoPage extends Component {
     const stateMethodProps = {
       ...this,
       ...this.state,
-      ...this.props
+      ...this.props,
     };
     return (
       <div>

@@ -24,7 +24,7 @@ export default function RndDemo(props) {
     isResizing,
     onResizeStartHandler,
     x,
-    y
+    y,
   } = props;
 
   return (
@@ -35,7 +35,7 @@ export default function RndDemo(props) {
       isShowBorder={isShowBorder}
     >
       <Rnd
-        ref={c => {
+        ref={(c) => {
           rnd = c;
         }}
         className="rnd-wrapper"
@@ -95,7 +95,7 @@ const RndContainer = styled.div`
   height: 506px;
   width: 906px;
   margin: auto;
-  background: ${props => (props.isShowGrid ? "#d0cdcd" : "transparent")};
+  background: ${(props) => (props.isShowGrid ? "#d0cdcd" : "transparent")};
   z-index: 8;
   margin-top: 100px;
 
@@ -103,9 +103,9 @@ const RndContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: ${props => !props.isResizing && `all 0.5s ease-in`};
+    transition: ${(props) => !props.isResizing && `all 0.2s ease-in`};
     /* padding: 10px; */
-    border: solid 2px ${props => (props.isShowBorder ? "red" : "transparent")};
+    border: solid 2px ${(props) => (props.isShowBorder ? "red" : "transparent")};
   }
 `;
 
