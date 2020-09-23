@@ -1,4 +1,4 @@
-import React, { Children } from "react";
+import React from "react";
 import { Rnd } from "react-rnd";
 import styled from "styled-components";
 
@@ -13,7 +13,6 @@ export default function RndDemo(props) {
     isShowGrid,
     showGridHandler,
     showBorderHandler,
-    onDragStartHandler,
     width,
     height,
     rnd,
@@ -24,7 +23,7 @@ export default function RndDemo(props) {
     isResizing,
     onResizeStartHandler,
     x,
-    y,
+    y
   } = props;
 
   return (
@@ -35,32 +34,17 @@ export default function RndDemo(props) {
       isShowBorder={isShowBorder}
     >
       <Rnd
-        ref={(c) => {
-          rnd = c;
-        }}
         className="rnd-wrapper"
-        default={
-          {
-            // x: 233,
-            // y: 130
-            // width: 327,
-            // height: 115
-          }
-        }
         size={{ width, height }}
         position={{ x, y }}
         minWidth={50}
         minHeight={50}
         bounds="parent"
-        // resizeGrid={[116, 65]}
         dragGrid={[116, 65]}
         onResizeStart={onResizeStartHandler}
         onResize={onResizeHandler}
-        // // onResizeStop={showGridHandler}
         onResizeStop={onResizeStopHandler}
         onDrag={onDragHandler}
-        // onDragStart={showGridHandler}
-        // onDragStop={onDragStopHandler}
       >
         <DraggableButton
           onMouseOver={showBorderHandler}
@@ -68,7 +52,6 @@ export default function RndDemo(props) {
         >
           Demo
         </DraggableButton>
-        {/* {children} */}
       </Rnd>
 
       {/* {isShowGrid && (
@@ -95,7 +78,7 @@ const RndContainer = styled.div`
   height: 506px;
   width: 906px;
   margin: auto;
-  background: ${(props) => (props.isShowGrid ? "#d0cdcd" : "transparent")};
+  background: ${props => (props.isShowGrid ? "#d0cdcd" : "transparent")};
   z-index: 8;
   margin-top: 100px;
 
@@ -103,9 +86,9 @@ const RndContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: ${(props) => !props.isResizing && `all 0.2s ease-in`};
+    transition: ${props => !props.isResizing && `all 0.2s ease-in`};
     /* padding: 10px; */
-    border: solid 2px ${(props) => (props.isShowBorder ? "red" : "transparent")};
+    border: solid 2px ${props => (props.isShowBorder ? "red" : "transparent")};
   }
 `;
 
