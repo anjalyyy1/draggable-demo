@@ -2,14 +2,14 @@ import React, { Component } from "react";
 import RndDemo from "./index";
 import {
   calculateGridSize,
-  calculateDimensionHandler
+  calculateDimensionHandler,
 } from "utils/gridCalculations";
 
 const element = {
   width: 211,
   height: 115,
   x: 348,
-  y: 130
+  y: 130,
 };
 
 const widthWithGutterSpace = 116; // also width difference
@@ -20,23 +20,34 @@ const rectWidth = 92;
 class RnDDemoPage extends Component {
   state = {
     isShowBorder: true,
-    isShowGrid: false,
-    width: 211,
-    height: 115,
-    x: 348,
-    y: 130
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+  };
+
+  componentDidMount() {
+    this.setStyling();
+  }
+
+  setStyling = () => {
+    const { elementDimensions } = this.props;
+
+    this.setState({
+      ...elementDimensions,
+    });
   };
 
   showBorderHandler = () => {
     this.setState({
-      isShowBorder: !this.state.isShowBorder
+      isShowBorder: !this.state.isShowBorder,
     });
   };
 
   onDragHandler = (e, data) => {
     this.setState({
       x: data.x,
-      y: data.y
+      y: data.y,
     });
   };
 
@@ -44,7 +55,7 @@ class RnDDemoPage extends Component {
     this.setState({
       width: ref.offsetWidth,
       height: ref.offsetHeight,
-      ...position
+      ...position,
     });
   };
 
@@ -52,7 +63,7 @@ class RnDDemoPage extends Component {
     this.props.showGridHandler();
 
     this.setState({
-      isResizing: true
+      isResizing: true,
     });
   };
 
@@ -96,7 +107,7 @@ class RnDDemoPage extends Component {
       y: forcedTop,
       width: forcedWidth,
       height: forcedHeight,
-      isResizing: false
+      isResizing: false,
     });
 
     setTimeout(() => {
@@ -108,7 +119,7 @@ class RnDDemoPage extends Component {
     const stateMethodProps = {
       ...this,
       ...this.state,
-      ...this.props
+      ...this.props,
     };
     return <RndDemo {...stateMethodProps} />;
   }

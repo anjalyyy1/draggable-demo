@@ -1,20 +1,37 @@
 import React from "react";
 import RndDemo from "components/rndDemo/container";
 import styled from "styled-components";
+import { map, get } from "lodash";
 
 // components
 import Grid from "components/Grid";
 
-const Demo = props => {
-  const { isShowGrid, showGridHandler } = props;
+const Demo = (props) => {
+  const { isShowGrid, showGridHandler, elementsList } = props;
+
   return (
     <PageWrapper isShowGrid={isShowGrid} className="parent">
-      <RndDemo showGridHandler={showGridHandler} isShowGrid={isShowGrid}>
-        <h2>This is first heading</h2>
-      </RndDemo>
-      {/* <RndDemo showGridHandler={showGridHandler} isShowGrid={isShowGrid}>
-        <h2>This is seconds heading</h2>
-      </RndDemo> */}
+      {map(elementsList, (eachElement) => {
+        console.log(
+          get(eachElement, `attributes`),
+          "get(eachElement, `attributes`)"
+        );
+        return (
+          <RndDemo
+            showGridHandler={showGridHandler}
+            isShowGrid={isShowGrid}
+            elementDimensions={get(eachElement, `styling`)}
+          >
+            {React.createElement(
+              get(eachElement, `tag`, "h1"),
+              get(eachElement, `attributes`)
+                ? get(eachElement, `attributes`)
+                : null,
+              get(eachElement, `content`)
+            )}
+          </RndDemo>
+        );
+      })}
 
       {isShowGrid && (
         <Grid
@@ -34,7 +51,7 @@ const PageWrapper = styled.div`
   height: 506px;
   width: 906px;
   margin: auto;
-  background: ${props => (props.isShowGrid ? "lightgray" : "transparent")};
+  background: ${(props) => (props.isShowGrid ? "lightgray" : "transparent")};
   z-index: 8;
   margin-top: 100px;
 `;
