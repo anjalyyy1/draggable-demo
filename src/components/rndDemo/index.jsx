@@ -24,12 +24,12 @@ export default function RndDemo(props) {
     x,
     y,
     children,
+    classNameText
   } = props;
 
   return (
     <RndContainer
       isResizing={isResizing}
-      // className="parent"
       isShowGrid={isShowGrid}
       isShowBorder={isShowBorder}
     >
@@ -39,18 +39,14 @@ export default function RndDemo(props) {
         position={{ x, y }}
         minWidth={50}
         minHeight={50}
-        bounds=".parent"
+        bounds={`.${classNameText}`}
         dragGrid={[116, 65]}
         onResizeStart={onResizeStartHandler}
         onResize={onResizeHandler}
         onResizeStop={onResizeStopHandler}
         onDrag={onDragHandler}
         onDragStart={showGridHandler}
-        onDragStop={() => {
-          setTimeout(() => {
-            showGridHandler();
-          }, 500);
-        }}
+        onDragStop={onDragStopHandler}
       >
         {children}
       </Rnd>
@@ -63,7 +59,7 @@ const RndContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: ${(props) => !props.isResizing && `all 0.2s ease-in`};
-    border: solid 2px ${(props) => (props.isShowBorder ? "red" : "transparent")};
+    transition: ${props => !props.isResizing && `all 0.2s ease-in`};
+    border: solid 2px ${props => (props.isShowBorder ? "red" : "transparent")};
   }
 `;

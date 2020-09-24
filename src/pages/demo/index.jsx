@@ -6,21 +6,28 @@ import { map, get } from "lodash";
 // components
 import Grid from "components/Grid";
 
-const Demo = (props) => {
-  const { isShowGrid, showGridHandler, elementsList } = props;
+const Demo = props => {
+  const {
+    isShowGrid,
+    showGridHandler,
+    elementsList,
+    classNameId,
+    getNewPosition,
+    getNewDimensions
+  } = props;
+  const classNameText = `parent${classNameId}`;
 
   return (
-    <PageWrapper isShowGrid={isShowGrid} className="parent">
-      {map(elementsList, (eachElement) => {
-        console.log(
-          get(eachElement, `attributes`),
-          "get(eachElement, `attributes`)"
-        );
+    <PageWrapper isShowGrid={isShowGrid} className={classNameText}>
+      {map(elementsList, eachElement => {
         return (
           <RndDemo
             showGridHandler={showGridHandler}
             isShowGrid={isShowGrid}
-            elementDimensions={get(eachElement, `styling`)}
+            classNameText={classNameText}
+            elementDetails={eachElement}
+            getNewDimensions={getNewDimensions}
+            getNewPosition={getNewPosition}
           >
             {React.createElement(
               get(eachElement, `tag`, "h1"),
@@ -51,9 +58,14 @@ const PageWrapper = styled.div`
   height: 506px;
   width: 906px;
   margin: auto;
-  background: ${(props) => (props.isShowGrid ? "lightgray" : "transparent")};
+  background: ${props => (props.isShowGrid ? "lightgray" : "transparent")};
   z-index: 8;
-  margin-top: 100px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 export default Demo;

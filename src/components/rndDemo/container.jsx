@@ -2,15 +2,9 @@ import React, { Component } from "react";
 import RndDemo from "./index";
 import {
   calculateGridSize,
-  calculateDimensionHandler,
+  calculateDimensionHandler
 } from "utils/gridCalculations";
-
-const element = {
-  width: 211,
-  height: 115,
-  x: 348,
-  y: 130,
-};
+import { get } from "lodash";
 
 const widthWithGutterSpace = 116; // also width difference
 const heightWithGutterSpace = 65; // also height difference
@@ -23,7 +17,7 @@ class RnDDemoPage extends Component {
     width: 0,
     height: 0,
     x: 0,
-    y: 0,
+    y: 0
   };
 
   componentDidMount() {
@@ -31,23 +25,23 @@ class RnDDemoPage extends Component {
   }
 
   setStyling = () => {
-    const { elementDimensions } = this.props;
+    const { elementDetails } = this.props;
 
     this.setState({
-      ...elementDimensions,
+      ...get(elementDetails, `styling`, {})
     });
   };
 
   showBorderHandler = () => {
     this.setState({
-      isShowBorder: !this.state.isShowBorder,
+      isShowBorder: !this.state.isShowBorder
     });
   };
 
   onDragHandler = (e, data) => {
     this.setState({
       x: data.x,
-      y: data.y,
+      y: data.y
     });
   };
 
@@ -55,7 +49,7 @@ class RnDDemoPage extends Component {
     this.setState({
       width: ref.offsetWidth,
       height: ref.offsetHeight,
-      ...position,
+      ...position
     });
   };
 
@@ -63,7 +57,7 @@ class RnDDemoPage extends Component {
     this.props.showGridHandler();
 
     this.setState({
-      isResizing: true,
+      isResizing: true
     });
   };
 
@@ -90,6 +84,8 @@ class RnDDemoPage extends Component {
   };
 
   onResizeStopHandler = (e, direction, ref, delta, position) => {
+    const elementId = get(this.props, `elementDetails._id`);
+
     // get the new forced dimensions
     const forcedWidth = this.getElementHorizontalDimensions(
       ref.offsetWidth,
@@ -102,12 +98,23 @@ class RnDDemoPage extends Component {
     );
     const forcedTop = this.getElementVerticalDimensions(position.y, "top");
 
+    this.props.getNewDimensions &&
+      this.props.getNewDimensions(
+        {
+          width: forcedWidth,
+          height: forcedHeight,
+          x: forcedLeft,
+          y: forcedTop
+        },
+        elementId
+      );
+
     this.setState({
       x: forcedLeft,
       y: forcedTop,
       width: forcedWidth,
       height: forcedHeight,
-      isResizing: false,
+      isResizing: false
     });
 
     setTimeout(() => {
@@ -115,11 +122,28 @@ class RnDDemoPage extends Component {
     }, 500);
   };
 
+  onDragStopHandler = (e, data) => {
+    const elementId = get(this.props, `elementDetails._id`);
+
+    setTimeout(() => {
+      this.props.showGridHandler();
+    }, 500);
+
+    this.props.getNewPosition &&
+      this.props.getNewPosition(
+        {
+          x: get(data, `lastX`),
+          y: get(data, `lastY`)
+        },
+        elementId
+      );
+  };
+
   render() {
     const stateMethodProps = {
       ...this,
       ...this.state,
-      ...this.props,
+      ...this.props
     };
     return <RndDemo {...stateMethodProps} />;
   }
