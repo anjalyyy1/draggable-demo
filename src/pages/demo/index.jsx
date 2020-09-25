@@ -5,21 +5,27 @@ import { map, get } from "lodash";
 
 // components
 import Grid from "components/Grid";
+import {
+  widthWithGutterSpace,
+  heightWithGutterSpace,
+  rectHeight,
+  rectWidth,
+} from "utils/gridValues";
 
-const Demo = props => {
+const Demo = (props) => {
   const {
     isShowGrid,
     showGridHandler,
     elementsList,
     classNameId,
     getNewPosition,
-    getNewDimensions
+    getNewDimensions,
   } = props;
   const classNameText = `parent${classNameId}`;
 
   return (
     <PageWrapper isShowGrid={isShowGrid} className={classNameText}>
-      {map(elementsList, eachElement => {
+      {map(elementsList, (eachElement) => {
         return (
           <RndDemo
             showGridHandler={showGridHandler}
@@ -40,11 +46,11 @@ const Demo = props => {
         );
       })}
 
-      {isShowGrid && (
+      {true && (
         <Grid
-          colsWidth={116}
-          gutterWidthSpace={92}
-          colsHeight={65}
+          colsWidth={widthWithGutterSpace}
+          gutterWidthSpace={rectWidth}
+          colsHeight={heightWithGutterSpace}
           gutterHeightSpace={49}
           isShowGrid={isShowGrid}
         ></Grid>
@@ -58,7 +64,7 @@ const PageWrapper = styled.div`
   height: 506px;
   width: 906px;
   margin: auto;
-  background: ${props => (props.isShowGrid ? "lightgray" : "transparent")};
+  background: ${(props) => (props.isShowGrid ? "lightgray" : "transparent")};
   z-index: 8;
 
   img {

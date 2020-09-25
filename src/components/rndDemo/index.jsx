@@ -3,7 +3,7 @@ import { Rnd } from "react-rnd";
 import styled from "styled-components";
 
 // components
-
+import { widthWithGutterSpace, heightWithGutterSpace } from "utils/gridValues";
 const style = {};
 
 export default function RndDemo(props) {
@@ -11,10 +11,8 @@ export default function RndDemo(props) {
     isShowBorder,
     isShowGrid,
     showGridHandler,
-    showBorderHandler,
     width,
     height,
-    rnd,
     onDragHandler,
     onDragStopHandler,
     onResizeStopHandler,
@@ -24,7 +22,7 @@ export default function RndDemo(props) {
     x,
     y,
     children,
-    classNameText
+    classNameText,
   } = props;
 
   return (
@@ -40,7 +38,7 @@ export default function RndDemo(props) {
         minWidth={50}
         minHeight={50}
         bounds={`.${classNameText}`}
-        dragGrid={[116, 65]}
+        dragGrid={[widthWithGutterSpace, heightWithGutterSpace]}
         onResizeStart={onResizeStartHandler}
         onResize={onResizeHandler}
         onResizeStop={onResizeStopHandler}
@@ -59,7 +57,7 @@ const RndContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: ${props => !props.isResizing && `all 0.2s ease-in`};
-    border: solid 2px ${props => (props.isShowBorder ? "red" : "transparent")};
+    transition: ${(props) => !props.isResizing && `all 0.2s ease-in`};
+    border: solid 2px ${(props) => (props.isShowBorder ? "red" : "transparent")};
   }
 `;

@@ -2,14 +2,15 @@ import React, { Component } from "react";
 import RndDemo from "./index";
 import {
   calculateGridSize,
-  calculateDimensionHandler
+  calculateDimensionHandler,
 } from "utils/gridCalculations";
 import { get } from "lodash";
-
-const widthWithGutterSpace = 116; // also width difference
-const heightWithGutterSpace = 65; // also height difference
-const rectHeight = 49;
-const rectWidth = 92;
+import {
+  widthWithGutterSpace,
+  heightWithGutterSpace,
+  rectHeight,
+  rectWidth,
+} from "utils/gridValues";
 
 class RnDDemoPage extends Component {
   state = {
@@ -17,7 +18,7 @@ class RnDDemoPage extends Component {
     width: 0,
     height: 0,
     x: 0,
-    y: 0
+    y: 0,
   };
 
   componentDidMount() {
@@ -28,20 +29,20 @@ class RnDDemoPage extends Component {
     const { elementDetails } = this.props;
 
     this.setState({
-      ...get(elementDetails, `styling`, {})
+      ...get(elementDetails, `styling`, {}),
     });
   };
 
   showBorderHandler = () => {
     this.setState({
-      isShowBorder: !this.state.isShowBorder
+      isShowBorder: !this.state.isShowBorder,
     });
   };
 
   onDragHandler = (e, data) => {
     this.setState({
       x: data.x,
-      y: data.y
+      y: data.y,
     });
   };
 
@@ -49,7 +50,7 @@ class RnDDemoPage extends Component {
     this.setState({
       width: ref.offsetWidth,
       height: ref.offsetHeight,
-      ...position
+      ...position,
     });
   };
 
@@ -57,27 +58,39 @@ class RnDDemoPage extends Component {
     this.props.showGridHandler();
 
     this.setState({
-      isResizing: true
+      isResizing: true,
     });
   };
 
-  getElementVerticalDimensions = (value, direction) => {
+  /**
+   * calculate the vertical dimensions i.e top distance and height
+   * @param {Number} currentValue current top/ height
+   * @param {String} direction bottom/top
+   * @return {Number} Number of grids the element has to cover
+   */
+  getElementVerticalDimensions = (currentValue, direction) => {
     const valueToChecked =
       direction === "bottom" ? rectHeight : heightWithGutterSpace;
 
     return calculateGridSize(
-      calculateDimensionHandler(value, heightWithGutterSpace),
+      calculateDimensionHandler(currentValue, heightWithGutterSpace),
       valueToChecked,
       heightWithGutterSpace
     );
   };
 
-  getElementHorizontalDimensions = (value, direction) => {
+  /**
+   * calculate the horizontal dimensions i.e width distance and left
+   * @param {Number} currentValue current width/ left
+   * @param {String} direction right/left
+   * @return {Number} number of grids the element has to cover
+   */
+  getElementHorizontalDimensions = (currentValue, direction) => {
     const valueToChecked =
       direction === "right" ? rectWidth : widthWithGutterSpace;
 
     return calculateGridSize(
-      calculateDimensionHandler(value, widthWithGutterSpace),
+      calculateDimensionHandler(currentValue, widthWithGutterSpace),
       valueToChecked,
       widthWithGutterSpace
     );
@@ -104,7 +117,7 @@ class RnDDemoPage extends Component {
           width: forcedWidth,
           height: forcedHeight,
           x: forcedLeft,
-          y: forcedTop
+          y: forcedTop,
         },
         elementId
       );
@@ -114,7 +127,7 @@ class RnDDemoPage extends Component {
       y: forcedTop,
       width: forcedWidth,
       height: forcedHeight,
-      isResizing: false
+      isResizing: false,
     });
 
     setTimeout(() => {
@@ -133,7 +146,7 @@ class RnDDemoPage extends Component {
       this.props.getNewPosition(
         {
           x: get(data, `lastX`),
-          y: get(data, `lastY`)
+          y: get(data, `lastY`),
         },
         elementId
       );
@@ -143,7 +156,7 @@ class RnDDemoPage extends Component {
     const stateMethodProps = {
       ...this,
       ...this.state,
-      ...this.props
+      ...this.props,
     };
     return <RndDemo {...stateMethodProps} />;
   }
