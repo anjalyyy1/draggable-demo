@@ -2,14 +2,14 @@ import React, { Component } from "react";
 import RndDemo from "./index";
 import {
   calculateGridSize,
-  calculateDimensionHandler,
+  calculateDimensionHandler
 } from "utils/gridCalculations";
 import { get } from "lodash";
 import {
   widthWithGutterSpace,
   heightWithGutterSpace,
   rectHeight,
-  rectWidth,
+  rectWidth
 } from "utils/gridValues";
 
 class RnDDemoPage extends Component {
@@ -18,7 +18,7 @@ class RnDDemoPage extends Component {
     width: 0,
     height: 0,
     x: 0,
-    y: 0,
+    y: 0
   };
 
   componentDidMount() {
@@ -29,20 +29,20 @@ class RnDDemoPage extends Component {
     const { elementDetails } = this.props;
 
     this.setState({
-      ...get(elementDetails, `styling`, {}),
+      ...get(elementDetails, `styling`, {})
     });
   };
 
   showBorderHandler = () => {
     this.setState({
-      isShowBorder: !this.state.isShowBorder,
+      isShowBorder: !this.state.isShowBorder
     });
   };
 
   onDragHandler = (e, data) => {
     this.setState({
       x: data.x,
-      y: data.y,
+      y: data.y
     });
   };
 
@@ -50,7 +50,7 @@ class RnDDemoPage extends Component {
     this.setState({
       width: ref.offsetWidth,
       height: ref.offsetHeight,
-      ...position,
+      ...position
     });
   };
 
@@ -58,7 +58,7 @@ class RnDDemoPage extends Component {
     this.props.showGridHandler();
 
     this.setState({
-      isResizing: true,
+      isResizing: true
     });
   };
 
@@ -117,7 +117,7 @@ class RnDDemoPage extends Component {
           width: forcedWidth,
           height: forcedHeight,
           x: forcedLeft,
-          y: forcedTop,
+          y: forcedTop
         },
         elementId
       );
@@ -127,7 +127,7 @@ class RnDDemoPage extends Component {
       y: forcedTop,
       width: forcedWidth,
       height: forcedHeight,
-      isResizing: false,
+      isResizing: false
     });
 
     setTimeout(() => {
@@ -142,11 +142,14 @@ class RnDDemoPage extends Component {
       this.props.showGridHandler();
     }, 500);
 
+    console.log(data, "dta");
     this.props.getNewPosition &&
       this.props.getNewPosition(
         {
+          width: get(data, `node.offsetWidth`),
+          height: get(data, `node.offsetHeight`),
           x: get(data, `lastX`),
-          y: get(data, `lastY`),
+          y: get(data, `lastY`)
         },
         elementId
       );
@@ -156,7 +159,7 @@ class RnDDemoPage extends Component {
     const stateMethodProps = {
       ...this,
       ...this.state,
-      ...this.props,
+      ...this.props
     };
     return <RndDemo {...stateMethodProps} />;
   }

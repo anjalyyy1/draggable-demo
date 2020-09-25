@@ -24,11 +24,9 @@ const dummyData = [
   {
     _id: "5f6c33d058c5e86de521d76c",
     type: "img",
-    attributes: {
-      src:
-        "https://i.picsum.photos/id/103/2592/1936.jpg?hmac=aC1FT3vX9bCVMIT-KXjHLhP6vImAcsyGCH49vVkAjPQ",
-      draggable: false
-    },
+    src:
+      "https://i.picsum.photos/id/103/2592/1936.jpg?hmac=aC1FT3vX9bCVMIT-KXjHLhP6vImAcsyGCH49vVkAjPQ",
+
     tag: "img",
     styling: {
       width: "208",
